@@ -3,19 +3,19 @@ package com.blog.demo.service;
 import com.blog.demo.dto.request.LoginRequestDTO;
 import com.blog.demo.dto.response.LoginResponseDTO;
 import com.blog.demo.dto.response.UsuarioResponseDTO;
-import com.blog.demo.security.TokenSerivce;
+import com.blog.demo.security.TokenService;
 import com.blog.demo.security.UsuarioDetailsImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthorizationSevice {
-    private final TokenSerivce tokenService;
+public class AuthorizationService {
+    private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthorizationSevice(TokenSerivce tokenSerivce, AuthenticationManager authenticationManager) {
-        this.tokenService = tokenSerivce;
+    public AuthorizationService(TokenService tokenService, AuthenticationManager authenticationManager) {
+        this.tokenService = tokenService;
         this.authenticationManager = authenticationManager;
     }
 

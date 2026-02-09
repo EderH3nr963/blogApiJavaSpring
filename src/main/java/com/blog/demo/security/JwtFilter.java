@@ -17,11 +17,11 @@ import java.util.UUID;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
-    public final TokenSerivce tokenSerivce;
+    public final TokenService tokenService;
     public final UsuarioRepository usuarioRepository;
 
-    public JwtFilter(TokenSerivce tokenSerivce, UsuarioRepository usuarioRepository) {
-        this.tokenSerivce = tokenSerivce;
+    public JwtFilter(TokenService tokenService, UsuarioRepository usuarioRepository) {
+        this.tokenService = tokenService;
         this.usuarioRepository = usuarioRepository;
     }
 
@@ -34,7 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         String token = recoverToken(request);
         if (token != null) {
-            String id = tokenSerivce.validateToken(token);
+            String id = tokenService.validateToken(token);
             if (id == null) return;
 
             Optional<Usuario> usuario = usuarioRepository.findById(UUID.fromString(id));

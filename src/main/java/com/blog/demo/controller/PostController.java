@@ -57,7 +57,7 @@ public class PostController {
 
     @GetMapping("/author/{authorId}")
     public ResponseEntity<PagePostResponseDTO> getAllByAuthorId(
-            Pageable pageable,
+            @PageableDefault(size = 10) Pageable pageable,
             @PathVariable UUID authorId
     ) {
         return ResponseEntity

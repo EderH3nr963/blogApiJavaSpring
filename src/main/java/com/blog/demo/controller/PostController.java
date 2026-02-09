@@ -77,6 +77,8 @@ public class PostController {
     public ResponseEntity<Void> deleteById(
             @PathVariable UUID postId
     ) {
+        postService.delete(postId);
+
         return ResponseEntity
                 .noContent().build();
     }

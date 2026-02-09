@@ -35,7 +35,7 @@ public class GlobalDefaultExceptionHandler {
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ApiErrorDTO> handleUsernameNotFoundExceptions(BusinessException ex, HttpServletRequest request) {
+    public ResponseEntity<ApiErrorDTO> handleUsernameNotFoundExceptions(UsernameNotFoundException ex, HttpServletRequest request) {
         ApiErrorDTO error = new ApiErrorDTO(
                 HttpStatus.UNAUTHORIZED.value(),
                 ex.getMessage(),

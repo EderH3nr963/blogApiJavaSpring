@@ -39,7 +39,7 @@ public class TokenSerivce {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException exception){
-            throw new RuntimeException("Internal Server Error", exception);
+            return null;
         }
     }
 }

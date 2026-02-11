@@ -2,6 +2,7 @@ package com.blog.demo.controller;
 
 import com.blog.demo.dto.request.CreatePostDTO;
 import com.blog.demo.dto.request.UpdateContentPostDTO;
+import com.blog.demo.dto.request.UpdateTitlePostDTO;
 import com.blog.demo.dto.response.PagePostResponseDTO;
 import com.blog.demo.dto.response.PostResponseDTO;
 import com.blog.demo.security.UsuarioDetailsImpl;
@@ -71,6 +72,15 @@ public class PostController {
     ) {
         return ResponseEntity
                 .ok().body(postService.updateContent(postId, dto));
+    }
+
+    @PatchMapping("/{postId}/title")
+    public ResponseEntity<PostResponseDTO> updateTitle(
+            @PathVariable UUID postId,
+            @RequestBody UpdateTitlePostDTO dto
+    ) {
+        return ResponseEntity
+                .ok().body(postService.updateTitle(postId, dto));
     }
 
     @DeleteMapping("/{postId}")

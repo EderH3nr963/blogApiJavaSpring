@@ -4,6 +4,7 @@ import com.blog.demo.domain.post.Post;
 import com.blog.demo.domain.usuario.Usuario;
 import com.blog.demo.dto.request.CreatePostDTO;
 import com.blog.demo.dto.request.UpdateContentPostDTO;
+import com.blog.demo.dto.request.UpdateTitlePostDTO;
 import com.blog.demo.dto.response.PagePostResponseDTO;
 import com.blog.demo.dto.response.PostResponseDTO;
 import com.blog.demo.mapper.PostMapper;
@@ -56,7 +57,7 @@ public class PostService {
     }
 
     public PagePostResponseDTO getAll(Pageable pageable) {
-        Page<Post> page = postRepository.findAll(pageable);
+        Page<Post> page = postRepository.findAllNotDeleted(pageable);
 
         Page<PostResponseDTO> dtoPage = page.map(postMapper::toResponse);
 
@@ -64,7 +65,7 @@ public class PostService {
     }
 
     public PagePostResponseDTO getAllByAuthorId(UUID authorId, Pageable pageable) {
-        Page<Post> page = postRepository.findByAuthorId(authorId, pageable);
+        Page<Post> page = postRepository.findByAuthorIdNotDeleted(authorId, pageable);
 
         Page<PostResponseDTO> dtoPage = page.map(postMapper::toResponse);
 
@@ -73,8 +74,19 @@ public class PostService {
 
     @PreAuthorize("hasRole('ADMIN') or @postSecurity.isOwner(#id)")
     @Transactional
+    public PostResponseDTO updateTitle(UUID id, UpdateTitlePostDTO dto) {
+        Post post = postRepository.findByIdNotDeleted(id)
+                .orElseThrow(() -> new EntityNotFoundException("Post não encontrado"));
+
+        post.setTitle(dto.title());
+
+        return postMapper.toResponse(post);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or @postSecurity.isOwner(#id)")
+    @Transactional
     public PostResponseDTO updateContent(UUID id, UpdateContentPostDTO dto) {
-        Post post = postRepository.findById(id)
+        Post post = postRepository.findByIdNotDeleted(id)
                 .orElseThrow(() -> new EntityNotFoundException("Post não encontrado"));
 
         post.setContent(dto.content());
@@ -85,9 +97,9 @@ public class PostService {
     @PreAuthorize("hasRole('ADMIN') or @postSecurity.isOwner(#id)")
     @Transactional
     public void delete(UUID id) {
-        Post post = postRepository.findById(id)
+        Post post = postRepository.findByIdNotDeleted(id)
                 .orElseThrow(() -> new EntityNotFoundException("Post não encotrado"));
 
-        postRepository.delete(post);
+        post.setDeleted(true);
     }
 }

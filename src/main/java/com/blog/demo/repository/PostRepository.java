@@ -13,7 +13,14 @@ import java.util.UUID;
 
 public interface PostRepository extends JpaRepository<Post, UUID> {
 
-    Page<Post> findByAuthorId(UUID authorId, Pageable pageable);
+    @Query("SELECT p FROM post p WHERE p.deleted = false AND p.id = :postId")
+    Optional<Post> findByIdNotDeleted(UUID postId);
+
+    @Query("SELECT p FROM post p WHERE p.deleted = false")
+    Page<Post> findAllNotDeleted(Pageable pageable);
+
+    @Query("SELECT p FROM post p WHERE p.author.id = :authorId AND p.deleted = false")
+    Page<Post> findByAuthorIdNotDeleted(UUID authorId, Pageable pageable);
 
     boolean existsByIdAndAuthorId(UUID postId, UUID authorId);
 }

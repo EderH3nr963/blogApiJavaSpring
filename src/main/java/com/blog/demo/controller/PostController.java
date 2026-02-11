@@ -7,6 +7,7 @@ import com.blog.demo.dto.response.PagePostResponseDTO;
 import com.blog.demo.dto.response.PostResponseDTO;
 import com.blog.demo.security.UsuarioDetailsImpl;
 import com.blog.demo.service.PostService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +33,10 @@ public class PostController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(
+            operationId = "createPost"
+    )
     public ResponseEntity<PostResponseDTO> create(
             @RequestBody @Valid CreatePostDTO dto,
             @AuthenticationPrincipal UsuarioDetailsImpl authenticateUsuario
@@ -41,6 +46,10 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            operationId = "getPostById"
+    )
     public ResponseEntity<PostResponseDTO> getById(
         @PathVariable UUID postId
     ) {
@@ -49,6 +58,10 @@ public class PostController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            operationId = "listAllPost"
+    )
     public ResponseEntity<PagePostResponseDTO> getAll(
              @PageableDefault(size = 10) Pageable pageable
     ) {
@@ -57,6 +70,10 @@ public class PostController {
     }
 
     @GetMapping("/author/{authorId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            operationId = "listAllPostOfUser"
+    )
     public ResponseEntity<PagePostResponseDTO> getAllByAuthorId(
             @PageableDefault(size = 10) Pageable pageable,
             @PathVariable UUID authorId
@@ -66,6 +83,10 @@ public class PostController {
     }
 
     @PatchMapping("/{postId}/content")
+    @Operation(
+            operationId = "updatedPostContent"
+    )
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<PostResponseDTO> updateContent(
             @PathVariable UUID postId,
             @RequestBody UpdateContentPostDTO dto
@@ -75,6 +96,10 @@ public class PostController {
     }
 
     @PatchMapping("/{postId}/title")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            operationId = "updatedPostTitle"
+    )
     public ResponseEntity<PostResponseDTO> updateTitle(
             @PathVariable UUID postId,
             @RequestBody UpdateTitlePostDTO dto
@@ -84,6 +109,10 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(
+            operationId = "deletePost"
+    )
     public ResponseEntity<Void> deleteById(
             @PathVariable UUID postId
     ) {

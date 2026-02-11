@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -32,6 +29,7 @@ public class AuthorizationController {
 
     @PostMapping("/login")
     @SecurityRequirement(name = "")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginRequestDTO dto) {
         LoginResponseDTO loginResponseDTO = authorizationService.login(dto);
 
@@ -40,6 +38,7 @@ public class AuthorizationController {
 
     @PostMapping("/register")
     @SecurityRequirement(name = "")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> login(@RequestBody @Valid RegisterRequestDTO dto) {
         usuarioService.create(dto);
 

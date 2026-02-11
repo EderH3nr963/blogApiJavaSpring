@@ -1,5 +1,6 @@
 package com.blog.demo.domain.usuario;
 
+import com.blog.demo.domain.comment.Comment;
 import com.blog.demo.domain.post.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -29,7 +30,10 @@ public class Usuario {
     private UsuarioRole role = UsuarioRole.USER;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    private List<Post> posts = new ArrayList<>();
+    private List<Post> posts = new ArrayList<Post>();
+
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<Comment>();
 
     @Column
     private Boolean blocked = false;
@@ -59,4 +63,6 @@ public class Usuario {
     public void setDeleted(Boolean deleted) { this.deleted = deleted; }
 
     public List<Post> getPosts() { return posts; }
+
+    public List<Comment> getComments() { return comments; }
 }

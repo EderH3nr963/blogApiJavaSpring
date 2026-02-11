@@ -1,13 +1,14 @@
 package com.blog.demo.domain.post;
 
+import com.blog.demo.domain.comment.Comment;
 import com.blog.demo.domain.usuario.Usuario;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity(name = "post")
@@ -23,10 +24,10 @@ public class Post {
     private String content;
 
     @CreationTimestamp
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
@@ -35,9 +36,8 @@ public class Post {
     @Column
     private Boolean deleted = false;
 
-    public Date getUpdatedAt() { return updatedAt; }
-
-    public Date getCreatedAt() { return createdAt; }
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<Comment>();
 
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
@@ -53,4 +53,11 @@ public class Post {
 
     public Boolean getDeleted() { return deleted; }
     public void setDeleted(Boolean deleted) { this.deleted = deleted; }
+
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+
+    public List<Comment> getComments() { return comments; }
 }

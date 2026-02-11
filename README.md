@@ -4,19 +4,25 @@ API REST desenvolvida em Java Spring Boot para gerenciamento de um sistema de bl
 
 ## 📋 Descrição
 
-Esta é uma API de blog desenvolvida para aprofundamento em Java Spring Boot, implementando conceitos de segurança com JWT, paginação, soft delete e controle de acesso baseado em roles (USER e ADMIN).
+Esta é uma API de blog desenvolvida para aprofundamento em Java Spring Boot, implementando conceitos de segurança com JWT, paginação, **soft delete lógico (flag `deleted`)** e controle de acesso baseado em roles (**USER** e **ADMIN**).
+
+O projeto segue boas práticas de arquitetura REST, separação de responsabilidades e uso de DTOs para evitar a exposição direta das entidades.
+
+## 🧪 Status do Projeto
+
+🚧 Em desenvolvimento para fins de estudo e evolução contínua.
 
 ## 🚀 Tecnologias Utilizadas
 
 - **Java 17**
 - **Spring Boot 4.0.2**
-- **Spring Security** - Autenticação e autorização
-- **Spring Data JPA** - Persistência de dados
-- **MySQL** - Banco de dados
-- **JWT (Auth0)** - Tokens de autenticação
-- **Swagger/OpenAPI 3.0** - Documentação da API
-- **Maven** - Gerenciamento de dependências
-- **Jakarta Validation** - Validação de dados
+- **Spring Security** – Autenticação e autorização
+- **Spring Data JPA** – Persistência de dados
+- **MySQL** – Banco de dados relacional
+- **JWT (Auth0)** – Tokens de autenticação
+- **Swagger / OpenAPI 3.0** – Documentação da API
+- **Maven** – Gerenciamento de dependências
+- **Jakarta Validation** – Validação de dados
 
 ## 📦 Pré-requisitos
 
@@ -34,7 +40,7 @@ Antes de executar o projeto, certifique-se de ter instalado:
 ```bash
 git clone <url-do-repositório>
 cd demo
-```
+````
 
 ### 2. Configure o banco de dados
 
@@ -57,7 +63,7 @@ spring.datasource.password=sua_senha
 api.security.token.secret=sua_chave_secreta_aqui
 ```
 
-**⚠️ Importante:** Em produção, use variáveis de ambiente ao invés de hardcoded secrets.
+**⚠️ Importante:** em ambientes de produção, utilize variáveis de ambiente para armazenar credenciais e secrets sensíveis.
 
 ### 4. Execute o projeto
 
@@ -65,33 +71,34 @@ api.security.token.secret=sua_chave_secreta_aqui
 mvn spring-boot:run
 ```
 
-Ou execute a classe `DemoApplication` diretamente na sua IDE.
+Ou execute a classe principal diretamente pela IDE.
 
-A aplicação estará disponível em: `http://localhost:8080`
+A aplicação estará disponível em:
+`http://localhost:8080`
 
 ## 📚 Documentação da API
 
-A documentação interativa da API está disponível através do Swagger UI:
+A documentação interativa da API está disponível via Swagger:
 
-- **Swagger UI:** http://localhost:8080/swagger-ui.html
-- **OpenAPI JSON:** http://localhost:8080/v3/api-docs
+* **Swagger UI:** [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+* **OpenAPI JSON:** [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
 
 ## 🔐 Autenticação
 
-A API utiliza autenticação baseada em JWT (JSON Web Tokens). Para acessar endpoints protegidos:
+A API utiliza autenticação baseada em JWT (JSON Web Token). Para acessar endpoints protegidos:
 
-1. Faça login ou registro através dos endpoints de autenticação
+1. Realize o registro ou login
 2. Copie o token retornado na resposta
-3. Inclua o token no header das requisições:
+3. Envie o token no header das requisições:
 
-```
+```http
 Authorization: Bearer <seu_token>
 ```
 
 ### Endpoints de Autenticação
 
-- `POST /api/v1/auth/register` - Registrar novo usuário
-- `POST /api/v1/auth/login` - Fazer login
+* `POST /api/v1/auth/register` – Registrar novo usuário
+* `POST /api/v1/auth/login` – Autenticar usuário
 
 ## 📁 Estrutura do Projeto
 
@@ -106,94 +113,106 @@ src/main/java/com/blog/demo/
 │   ├── request/
 │   └── response/
 ├── exception/           # Exceções customizadas
-├── mapper/              # Mappers para conversão de objetos
+├── mapper/              # Conversão entre entidades e DTOs
 ├── repository/          # Interfaces JPA Repository
-├── security/            # Configurações de segurança e JWT
-└── service/             # Lógica de negócio
+├── security/            # Configuração de segurança e JWT
+└── service/             # Regras de negócio
 ```
 
 ## 🛣️ Endpoints Principais
 
-### Autenticação
+### 🔑 Autenticação
 
-- `POST /api/v1/auth/register` - Registrar usuário
-- `POST /api/v1/auth/login` - Login
+* `POST /api/v1/auth/register` – Registrar usuário
+* `POST /api/v1/auth/login` – Login
 
-### Posts
+### 📝 Posts
 
-- `GET /api/v1/post` - Listar posts (paginação)
-- `GET /api/v1/post/{postId}` - Buscar post por ID
-- `GET /api/v1/post/author/{authorId}` - Listar posts por autor
-- `POST /api/v1/post` - Criar post (autenticado)
-- `PATCH /api/v1/post/{postId}/content` - Atualizar conteúdo (autor ou admin)
-- `DELETE /api/v1/post/{postId}` - Deletar post (autor ou admin)
+* `GET /api/v1/post` – Listar posts (paginação)
+* `GET /api/v1/post/{postId}` – Buscar post por ID
+* `GET /api/v1/post/author/{authorId}` – Listar posts por autor
+* `POST /api/v1/post` – Criar post (usuário autenticado)
+* `PATCH /api/v1/post/{postId}/content` – Atualizar conteúdo (autor ou admin)
+* `DELETE /api/v1/post/{postId}` – Remover post (soft delete)
 
-### Usuários
+### 👤 Usuários
 
-- `GET /api/v1/users/me` - Obter perfil do usuário logado
-- `PATCH /api/v1/users/email` - Atualizar email
-- `PATCH /api/v1/users/username` - Atualizar username
-- `PATCH /api/v1/users/password` - Atualizar senha
-- `DELETE /api/v1/users` - Deletar conta (soft delete)
+* `GET /api/v1/users/me` – Obter perfil do usuário autenticado
+* `PATCH /api/v1/users/email` – Atualizar email
+* `PATCH /api/v1/users/username` – Atualizar username
+* `PATCH /api/v1/users/password` – Atualizar senha
+* `DELETE /api/v1/users` – Remover conta (soft delete)
 
-### Admin (requer role ADMIN)
+### 🛠️ Administração (role ADMIN)
 
-- `GET /api/v1/admin/**` - Endpoints administrativos
+* `GET /api/v1/admin/users` – Listar usuários
+* `GET /api/v1/admin/users/{id}` – Buscar usuário por ID
+* `PATCH /api/v1/admin/users/{id}` – Atualizar dados do usuário
+* `DELETE /api/v1/admin/users/{id}` – Remover usuário
 
 ## 👥 Roles e Permissões
 
-A API possui dois níveis de acesso:
+* **USER**
 
-- **USER**: Usuário padrão, pode criar e gerenciar seus próprios posts
-- **ADMIN**: Administrador, possui acesso completo ao sistema
+    * Criar e gerenciar seus próprios posts
+    * Gerenciar seus dados pessoais
+
+* **ADMIN**
+
+    * Acesso completo aos usuários
+    * Moderação de posts e comentários
 
 ## 🔒 Segurança
 
-- Senhas são codificadas usando BCrypt
-- Tokens JWT com expiração de 48 horas
-- Proteção CSRF desabilitada (configurar adequadamente em produção)
-- CORS configurado
-- Validação de dados de entrada
+* Senhas armazenadas com **BCrypt**
+* Autenticação stateless com JWT
+* Tokens com expiração configurada
+* Proteção CSRF desabilitada (adequado para APIs REST)
+* Configuração de CORS
+* Validação de dados com Jakarta Validation
 
 ## 📝 Modelos de Dados
 
-### Usuario
+### Usuário
 
-- `id` (UUID)
-- `username` (único)
-- `email` (único)
-- `password` (hash)
-- `role` (USER/ADMIN)
-- `blocked` (boolean)
-- `deleted` (boolean)
+* `id` (UUID)
+* `username` (único)
+* `email` (único)
+* `password` (hash)
+* `role` (USER / ADMIN)
+* `blocked` (boolean)
+* `deleted` (boolean)
 
 ### Post
 
-- `id` (UUID)
-- `title` (String)
-- `content` (String)
-- `author` (Usuario)
-- `createdAt` (Date)
-- `updatedAt` (Date)
-- `deleted` (boolean)
+* `id` (UUID)
+* `title`
+* `content`
+* `author` (Usuário)
+* `createdAt`
+* `updatedAt`
+* `deleted` (boolean)
 
+## 🏗️ Decisões de Arquitetura
 
-## 🔄 Próximos Passos
-
-- [ ] Adicionar validação de força de senha
-- [ ] Adicionar testes unitários e de integração
-- [ ] Implementar filtros para soft delete nas queries de post
-- [ ] Configurar variáveis de ambiente para produção
+* Uso de DTOs para evitar exposição de entidades
+* Separação em camadas (Controller, Service, Repository)
+* Autenticação baseada em JWT
+* Controle de acesso por roles
+* Soft delete para preservar histórico de dados
 
 ## 📄 Licença
 
-Este projeto é um projeto de demonstração para fins educacionais.
+Projeto desenvolvido para fins educacionais.
 
 ## 👨‍💻 Autor
 
-Desenvolvido para aprofundamento em Java Spring Boot.
+Eder
+Estudante de Análise e Desenvolvimento de Sistemas
+Focado em Java, Spring Boot e APIs REST
 
 ---
 
-**Versão:** 1.0.0  
+**Versão:** 1.0.0
 **Última atualização:** 2026
+

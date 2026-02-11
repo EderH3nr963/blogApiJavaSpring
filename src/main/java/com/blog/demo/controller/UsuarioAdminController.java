@@ -7,6 +7,7 @@ import com.blog.demo.dto.request.UpdateUsernameDTO;
 import com.blog.demo.dto.response.PageUsuariosResponseDTO;
 import com.blog.demo.dto.response.UsuarioResponseDTO;
 import com.blog.demo.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,10 @@ public class UsuarioAdminController {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            operationId = "adminGetUsuarioById"
+    )
      public ResponseEntity<UsuarioResponseDTO> getById(
              @PathVariable UUID id
      ) {
@@ -37,11 +42,19 @@ public class UsuarioAdminController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            operationId = "adminListAllUsuarios"
+    )
     public ResponseEntity<PageUsuariosResponseDTO> getAll (Pageable pageable) {
         return ResponseEntity.ok().body(usuarioService.getAll(pageable));
     }
 
     @PatchMapping("/{id}/email")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            operationId = "adminUpdateEmail"
+    )
     public ResponseEntity<UsuarioResponseDTO> updateEmail(
             @PathVariable UUID id,
             @RequestBody @Valid UpdateEmailDTO dto
@@ -50,6 +63,10 @@ public class UsuarioAdminController {
     }
 
     @PatchMapping("/{id}/username")
+    @Operation(
+            operationId = "adminUpdateUsername"
+    )
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UsuarioResponseDTO> updateUsername(
             @PathVariable UUID id,
             @RequestBody @Valid UpdateUsernameDTO dto
@@ -58,6 +75,10 @@ public class UsuarioAdminController {
     }
 
     @PatchMapping("/{id}/password")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(
+            operationId = "adminUpdatePassword"
+    )
     public ResponseEntity<Void> updatePassword(
             @PathVariable UUID id,
             @RequestBody @Valid UpdatePasswordDTO dto
@@ -68,6 +89,10 @@ public class UsuarioAdminController {
     }
 
     @PatchMapping("/{id}/blocked")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(
+            operationId = "adminUpdateBlocked"
+    )
     public ResponseEntity<Void> updateBlocked(
             @PathVariable UUID id,
             @RequestBody @Valid UpdateBlockedRequestDTO dto
@@ -79,6 +104,10 @@ public class UsuarioAdminController {
 
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(
+            operationId = "adminDeleteUsuario"
+    )
     public ResponseEntity<Void> delete(
             @PathVariable UUID id
     ) {

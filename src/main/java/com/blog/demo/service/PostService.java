@@ -72,7 +72,7 @@ public class PostService {
         return PagePostResponseDTO.from(dtoPage);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or @postSecurity.isOwner(#id)")
+    @PreAuthorize("hasRole('ADMIN') or @postSecurity.isOwnerAuthorId(#id)")
     @Transactional
     public PostResponseDTO updateTitle(UUID id, UpdateTitlePostDTO dto) {
         Post post = postRepository.findByIdNotDeleted(id)

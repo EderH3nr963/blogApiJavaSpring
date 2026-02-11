@@ -6,6 +6,7 @@ import com.blog.demo.dto.request.UpdateUsernameDTO;
 import com.blog.demo.dto.response.UsuarioResponseDTO;
 import com.blog.demo.security.UsuarioDetailsImpl;
 import com.blog.demo.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -24,11 +25,19 @@ public class UsuarioController {
     }
 
     @GetMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            operationId = "getMyProfile"
+    )
     public ResponseEntity<UsuarioResponseDTO> myProfile(@AuthenticationPrincipal UsuarioDetailsImpl usuario) {
         return ResponseEntity.ok().body(usuarioService.getById(usuario.getId()));
     }
 
     @PatchMapping("/email")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            operationId = "updateEmail"
+    )
     public ResponseEntity<UsuarioResponseDTO> updateEmail(
             @AuthenticationPrincipal UsuarioDetailsImpl usuario,
             @RequestBody @Valid UpdateEmailDTO dto
@@ -37,6 +46,10 @@ public class UsuarioController {
     }
 
     @PatchMapping("/username")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+            operationId = "updateUsername"
+    )
     public ResponseEntity<UsuarioResponseDTO> updateUsername(
             @AuthenticationPrincipal UsuarioDetailsImpl usuario,
             @RequestBody @Valid UpdateUsernameDTO dto
@@ -45,7 +58,11 @@ public class UsuarioController {
     }
 
     @PatchMapping("/password")
-    public ResponseEntity<Void> updateUsername(
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(
+            operationId = "updatedPassword"
+    )
+    public ResponseEntity<Void> updatePassowrd(
             @AuthenticationPrincipal UsuarioDetailsImpl usuario,
             @RequestBody @Valid UpdatePasswordDTO dto
     ) {
@@ -55,6 +72,10 @@ public class UsuarioController {
     }
 
     @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(
+            operationId = "deleteUsuario"
+    )
     public ResponseEntity<Void> delete(
             @AuthenticationPrincipal UsuarioDetailsImpl usuario
     ) {
